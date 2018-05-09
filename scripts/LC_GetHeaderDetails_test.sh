@@ -14,13 +14,18 @@
 # INFILES=(`ls -1 ${INDIR}/*.gz | perl -pe 's/.+\/(.+)\.gz/$1/' `);
 
 INFILES=(`ls -1 ${INDIR}/*.gz`);
+echo ${INFILES}
 
 echo "Getting header details from files  ...."
 
 if [ ! -z "$SLURM_ARRAY_TASK_ID" ]
 then
 
-    head -n1 ${INFILES[$i]} | gunzip >> headers.txt
+    i=$SLURM_ARRAY_TASK_ID
+    echo $i
+    CMD="zcat ${INFILES[$i]} | head -n2  >> headers.txt"
+    echo $CMD
+    eval "${CMD}"
 
 else
     echo "Error: Missing array index as SLURM_ARRAY_TASK_ID"
