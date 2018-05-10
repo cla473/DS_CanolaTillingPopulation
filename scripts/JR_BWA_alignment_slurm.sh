@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=run_bwa_alignment
-#SBATCH --time=00:10:00
-#SBATCH --ntasks-per-node=5
-#SBATCH --mem=20g
+#SBATCH --time=01:00:00
+#SBATCH --ntasks=10
+#SBATCH --mem=5g
 module load bwa
 if [ -d "$INDIR" ]
 then
@@ -10,7 +10,7 @@ then
     if [ ! -z "$SLURM_ARRAY_TASK_ID" ]
     then
         i=$SLURM_ARRAY_TASK_ID
-        fastqc ${SAMPLES[$i]}
+        bwa mem GCF_000686985.2_Bra_napus_v2.0_genomic.fna ${SAMPLES[$i]} > ${SAMPLES[$i]}.txt
     else
         echo "Error: Missing array index as SLURM_ARRAY_TASK_ID"
     fi
@@ -21,7 +21,7 @@ fi
 
 # For Submission:
 #
-# INDIR="./blah/blah/"       PUT YOUR DIRECTORY LOCATION HERE
+# INDIR="../jared/NB501086_0095_CHelliwell_CSIRO_Brapa_gDNA"       PUT YOUR DIRECTORY LOCATION HERE
 # NUM=$(expr $(ls -1 ${INDIR}/*.fastq.gz | wc -l) - 1)
-#sbatch -a 0-$NUM INDIR="$INDIR" JR_bwa_aligment.sh
+#sbatch -a 0-$NUM INDIR="$INDIR" JR_BWA_aligment_slurm.sh
 
