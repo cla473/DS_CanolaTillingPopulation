@@ -11,7 +11,7 @@ INDIR="/OSM/CBR/AF_DATASCHOOL/input/2018-05-03_canola/*/*.gz"
 
 
 #add a header row to our header.txt file
-echo "id, filename, name, name, name" > headers.txt
+echo "id, filename, barcode:laneNumber, index" > headers.txt
 
 let count=0
 
