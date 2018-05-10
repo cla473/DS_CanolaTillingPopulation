@@ -21,7 +21,7 @@ fi
 
 # For Submission:
 #
-# INDIR="../jared/NB501086_0095_CHelliwell_CSIRO_Brapa_gDNA"       PUT YOUR DIRECTORY LOCATION HERE
+# INDIR="/OSM/CBR/AF_DATASCHOOL/input/jared/NB501086_0095_CHelliwell_CSIRO_Brapa_gDNA"       PUT YOUR DIRECTORY LOCATION HERE
 # NUM=$(expr $(ls -1 ${INDIR}/*.fastq.gz | wc -l) - 1)
-#sbatch -a 0-$NUM INDIR="$INDIR" JR_BWA_aligment_slurm.sh
+#sbatch -a 0-$NUM --export INDIR="$INDIR" JR_BWA_aligment_slurm.sh
 
