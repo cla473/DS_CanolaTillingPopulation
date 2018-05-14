@@ -17,13 +17,13 @@
 
 
 #rm(list=ls()) #remove existing objects in workspace
-#setwd("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/") #set relevant working directory - local copy for analysis
+setwd("U:/2018/AFDS/data/") #set relevant working directory - local copy for analysis
 library(readxl)
 library(tidyverse)
 
 #sowing date was recorded in the "ALL" sheet of "M2 seeds grids to soil and scoring of phenotypes"
 #extract this date before starting the loop (there are 10 plates in this file)
-ALL<- read_xlsx("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/M2 seeds grids to soil and scoring of phenotypes.xlsx", sheet = "ALL")
+ALL<- read_xlsx("M2 seeds grids to soil and scoring of phenotypes.xlsx", sheet = "ALL")
 sowing_date<-ALL%>%
   select('plate #', planted)%>%
   distinct(planted)%>% #pull out only the first line of each plate (assuming these are all the same)
@@ -42,7 +42,7 @@ num_plates<-6 #number of plates that were sequenced
 #rm(i) #remove i if needed
 
 for (i in (1:num_plates)){
-  plate<- (read_xlsx("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/M2 96 plates.xlsx", sheet = paste("plate ",i, sep=""))) #call in the  data and the sheet name (by plate number)
+  plate<- (read_xlsx("M2 96 plates.xlsx", sheet = paste("plate ",i, sep=""))) #call in the  data and the sheet name (by plate number)
   master<-plate[,1:6] #pull out just the first 6 columns with relevant information, rename this "master" dataframe
   colnames(master)<-c("Plant_ID","Plate_ID","Plate_Position","Gen" ,"Treatment",
                         "Date_of_treatment") #assigning edited column names for tidyness
@@ -95,14 +95,14 @@ filenames<-c("160725_Canola_Plate_1","160726plate2",
 sheetnames<-c("160725", "160726plate2", "160726plate3", "160726plate4", 
               "RESULTS PLATE 5 161128", "RESULTS PLATE 6 161129")
 #Plate1
-plate1<-read_xlsx(paste("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/",filenames[1],".xlsx", sep=""), sheet=sheetnames[1])
+plate1<-read_xlsx(paste(filenames[1],".xlsx", sep=""), sheet=sheetnames[1])
 Plate1_vol<-as.numeric(plate1$X__12[seq(54,68,2)])
 Plate1_con<-as.numeric(plate1$X__12[seq(35,49,2)])
 plate1_vol_con<-as.data.frame(cbind(seq(1,8,1),Plate1_vol, Plate1_con ))
 colnames(plate1_vol_con)<-c("Pool", "Total_Vol", "Average_con")
 
 #Plate2
-plate2<-read_xlsx(paste("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/",filenames[2],".xlsx", sep=""), sheet=sheetnames[2],col_names = FALSE)
+plate2<-read_xlsx(paste(filenames[2],".xlsx", sep=""), sheet=sheetnames[2],col_names = FALSE)
 Plate2_vol<-as.numeric(plate2$X__14[seq(64,78,2)])
 #need to calculate average concentration for the individuals wells to get pooled con
 Plate2_con<-as.data.frame(lapply(plate2[seq(45,59,2), 1:12], as.numeric))
@@ -110,7 +110,7 @@ plate2_vol_con<-as.data.frame(cbind(seq((1+8),(8+8), 1),Plate2_vol, rowMeans(Pla
 colnames(plate2_vol_con)<-colnames(plate1_vol_con)
 
 #Plate3
-plate3<-read_xlsx(paste("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/",filenames[3],".xlsx", sep=""), sheet=sheetnames[3],col_names = FALSE)
+plate3<-read_xlsx(paste(filenames[3],".xlsx", sep=""), sheet=sheetnames[3],col_names = FALSE)
 Plate3_vol<-as.numeric(plate3$X__14[seq(65,79,2)])
 #need to calculate average concentration for the individuals wells to get pooled con
 Plate3_con<-as.data.frame(lapply(plate3[seq(46,60,2), 1:12], as.numeric))
@@ -118,7 +118,7 @@ plate3_vol_con<-as.data.frame(cbind(seq((1+2*8),(8+2*8), 1),Plate3_vol, rowMeans
 colnames(plate3_vol_con)<-colnames(plate1_vol_con)
 
 #Plate4
-plate4<-read_xlsx(paste("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/",filenames[4],".xlsx", sep=""), sheet=sheetnames[4],col_names = FALSE)
+plate4<-read_xlsx(paste(filenames[4],".xlsx", sep=""), sheet=sheetnames[4],col_names = FALSE)
 Plate4_vol<-as.numeric(plate4$X__14[seq(63,77,2)])
 #need to calculate average concentration for the individuals wells to get pooled con
 Plate4_con<-as.data.frame(lapply(plate4[seq(45,59,2), 1:12], as.numeric))
@@ -126,12 +126,12 @@ plate4_vol_con<-as.data.frame(cbind(seq((1+3*8),(8+3*8), 1), Plate4_vol, rowMean
 colnames(plate4_vol_con)<-colnames(plate1_vol_con)
 
 #Plates 5 and 6 are summarised at top of files: ###COULD NOT FIND CONCENTRATIONS FOR PLATES 5 & 6
-plate5<-read_xlsx(paste("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/",filenames[5],".xlsx", sep=""), sheet=sheetnames[5])
+plate5<-read_xlsx(paste(filenames[5],".xlsx", sep=""), sheet=sheetnames[5])
 Plate5_vol<-plate5[1:8, 18]
 plate5_vol_con<-cbind(seq((1+4*8),(8+4*8), 1),Plate5_vol, rep("NA", 8))
 colnames(plate5_vol_con)<-colnames(plate1_vol_con)
 
-plate6<-read_xlsx(paste("/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/",filenames[6],".xlsx", sep=""), sheet=sheetnames[6],col_names = FALSE)
+plate6<-read_xlsx(paste(filenames[6],".xlsx", sep=""), sheet=sheetnames[6],col_names = FALSE)
 Plate6_vol<-plate6[1:8, 20]
 plate6_vol_con<-cbind(seq((1+5*8),(8+5*8), 1), Plate6_vol, rep("NA", 8))
 colnames(plate6_vol_con)<-colnames(plate1_vol_con)
@@ -154,12 +154,12 @@ data <- as.data.frame(plants_in_pools[c(1:12,16:23,13:15,24:25)])# -- changes co
 
 data[,7] <- as.Date(gsub("\\.","-",substr(unlist(data[,7]), 3, nchar(data[,7]))), "%d-%m-%y")
 
-headers <- read.csv("../metadata/headers.txt", header=T)
+headers <- read.csv("headers.txt", header=T)
 headers <- headers[order(headers$poolNo),]
 
 df <- cbind(data, headers[,-4])
 
 #write_csv("to Pearcey directort.csv) FILL ME IN 
-write.csv(df, "/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/combined_data.csv")
+write.csv(df, "combined_data.csv")
 
 #END SCRIPT (FOR NOW)

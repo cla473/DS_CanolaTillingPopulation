@@ -1,8 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=run_bwa_alignment
 #SBATCH --time=01:00:00
-#SBATCH --ntasks=10
-#SBATCH --mem=5g
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=10
+#SBATCH --mem=10g
 module load bwa
 if [ -d "$INDIR" ]
 then
