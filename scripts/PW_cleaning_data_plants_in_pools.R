@@ -17,7 +17,7 @@
 
 
 #rm(list=ls()) #remove existing objects in workspace
-setwd("U:/2018/AFDS/data/") #set relevant working directory
+setwd("U:/2018/AFDS/data/") #set relevant working directory - local copy for analysis
 library(readxl)
 library(tidyverse)
 
@@ -154,9 +154,12 @@ data <- as.data.frame(plants_in_pools[c(1:12,16:23,13:15,24:25)])# -- changes co
 
 data[,7] <- as.Date(gsub("\\.","-",substr(unlist(data[,7]), 3, nchar(data[,7]))), "%d-%m-%y")
 
+headers <- read.csv("headers.txt", header=T)
+headers <- headers[order(headers$poolNo),]
+
+df <- cbind(data, headers[,-4])
 
 #write_csv("to Pearcey directort.csv) FILL ME IN 
-write.csv(data, "outdata.csv")
-
+write.csv(df, "combined_data.csv")
 
 #END SCRIPT (FOR NOW)
