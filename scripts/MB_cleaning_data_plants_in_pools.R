@@ -154,12 +154,20 @@ data <- as.data.frame(plants_in_pools[c(1:12,16:23,13:15,24:25)])# -- changes co
 
 data[,7] <- as.Date(gsub("\\.","-",substr(unlist(data[,7]), 3, nchar(data[,7]))), "%d-%m-%y")
 
-headers <- read.csv("../metadata/headers.txt", header=T)
-headers <- headers[order(headers$poolNo),]
+headers <- read.csv("/OSM/CBR/AF_DATASCHOOL/output/metadata/headers.txt", header=T)
+#headers <- headers[order(headers$poolNo),]
+#df <- cbind(data, headers[,-4])
 
-df <- cbind(data, headers[,-4])
+#mod cla473 - merge the data based on the "Pool" number, and then put data into different order.
+df <- merge(data, headers, by="Pool") %>% 
+  select (Pool, Plant_ID, Plate_ID, Index, Barcode, Lane_No, Sample_No,
+  Gen, Treatment, Date_of_treatment, sowing_date, sequence_platform, 
+  sequence_technique, sequence_date, processing_centre, Plant1, 
+  Plant2, Plant3, Plant4, Plant5, Plant6, Plant7, Plant8, Plant9,
+  Plant10, Plant11, Plant12, Total_Vol, Average_con, Filename)
+            
 
 #write_csv("to Pearcey directort.csv) FILL ME IN 
-write.csv(df, "/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv")
+write.csv(df, "/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv", row.names=FALSE)
 
 #END SCRIPT (FOR NOW)
