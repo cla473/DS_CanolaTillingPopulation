@@ -34,7 +34,7 @@ sowing_date<-ALL%>%
 sequence_date<-c("TBA", "TBA", "TBA", "TBA", "TBA", "TBA")#according to plate number
 sequence_platform<-"Illumina" 
 sequence_technique<-c("HiSeq","HiSeq","HiSeq","NextSeq","NextSeq","NextSeq") #according to plate number
-processing_centre<-"ACRF Biomolecular Resource Facility, John_Curtin"
+processing_centre<-"ACRF_Biomolecular_Resource_Facility-John_Curtin"
 
 
 num_plates<-6 #number of plates that were sequenced
