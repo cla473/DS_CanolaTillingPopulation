@@ -160,6 +160,6 @@ headers <- headers[order(headers$poolNo),]
 df <- cbind(data, headers[,-4])
 
 #write_csv("to Pearcey directort.csv) FILL ME IN 
-write.csv(df, "/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/combined_data.csv")
+write.csv(df, "/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv")
 
 #END SCRIPT (FOR NOW)
