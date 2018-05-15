@@ -4,68 +4,65 @@
 #SBATCH --ntasks=10
 #SBATCH --mem=10g
 
+#Note:  The path to the combined_data.csv will be passed in
+#       This fill is a list of files to process and includes (hopefully) all of the relevant information
+#       required to run the process
+
+#NOTE:  The output directory is same as filenamePath directory except that 'input' is replace with 'output'
+
+#for testing only
+INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
+
 module load bwa
 
-DATAFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
-#NOTE:  OUTDIR is same as INDIR except that input is replace with output
+#this saves the original input format, then sets the IFS to comma separated format
+#OLDIFS=$IFS
+#IFS=,
 
-if [ -d "$INDIR" ]
-then
-    IN_LIST=( `ls -1 ${INDIR}/*.fastq.gz` )
-    if [ ! -z "$SLURM_ARRAY_TASK_ID" ]
-    then
-        FILE=${IN_LIST["$SLURM_ARRAY_TASK_ID"]}
-        FILENAME=`echo $(basename "$FILE")`
-        OUTPATH=`echo $(dirname "${FILE}") | sed -r 's/input/output/g `
-        
+#need to check what we need here as far as validating the file goes
+#if [ -f "$INFILE" ] && { echo "$INFILE file not found"; exit 99; }
 
+cat $INFILE | while read LINE
+do
+    #echo $LINE
+    FN=`echo $LINE | cut -d ',' -f6`   #FileName"
+    echo "FN : $FN "
 
-#        STEM=${IN_LIST["$SLURM_ARRAY_TASK_ID"]}
-#        SAMPLE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f2`   
-#        SPECIES=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f5`
-#        INDEX=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f3`
-#        DATE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f4`
-#	       (date library was contructed)
-#        PLATFORM=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f10`
-#        LEFT=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f11`
-#        RIGHT=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f12`
-#        LIBRARY="${SAMPLE}.${LEFT}-${RIGHT}.${DATE}"
-#                (sample id, index from header and sample date)
-#        CENTRE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f8`
-#        SEQDATE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f9`
-#        UNIT=`gzip -cd ${IN_DIR}/${STEM}*p.fq.gz | head -1 | cut -d':' -f${UNIT_RX}`
-#		(barcode, lane no from header)
-#	ID=`echo ${UNIT}.${INDEX} | sed s/:/./g`
-#            sed means replace ':' with '.'
-#
-#        echo "@RG\tID:${ID}\tCN:${CENTRE}\t"` \
-#              `"DT:${SEQDATE}\tLB:${LIBRARY}\t"` \
-#              `"PL:${PLATFORM}\tPU:${UNIT}\tSM:${SAMPLE}" > $OUT_DIR/${STEM}.log
-#        if [ ! -f ${OUT_DIR}/${STEM}.sam ]
-#        then
-##           bwa mem GCF_000686985.2_Bra_napus_v2.0_genomic.fna ${SAMPLES[$i]} > ${SAMPLES[$i]}.txt
-#
-#            bwa mem ${BIG}/data/${REF%.*} ${IN_DIR}/${STEM}*p.fq.gz \
-#                -t $THREADS \
-#                -k $SEED \
-#                -w $WIDTH \
-#                -r $INTERNAL \
-#                -T $SCORE \
-#                -M \
-#                -R 
-#"@RG\tID:${ID}\tCN:${CENTRE}\tDT:${SEQDATE}\tLB:${LIBRARY}\tPL:${PLATFORM}\tPU:${UNIT}\tSM:${SAMPLE}" > 
-#${OUT_DIR}/${STEM}.sam 2>> $OUT_DIR/${STEM}.log
-#        fi
+    ID=`echo $LINE | cut -d ',' -f1`  #Index"
+    echo "ID : $ID"
 
-else
-    echo "Error: Missing array index as SLURM_ARRAY_TASK_ID"
-fi
+    BC=`echo $LINE | cut -d ',' -f2`  #Barcode"
+    echo "BC : $BC"
 
+    CN=`echo $LINE | cut -d ',' -f17`  #processing_centre"
+    echo "CN : $CN"
 
-# For Submission:
-# INDIR="/OSM/CBR/AF_DATASCHOOL/input/2018-05-03_canola/SN877_0416_CHelliwell_CSIRO_Brapa_gDNA"
-# INDIR="/OSM/CBR/AF_DATASCHOOL/input/2018-05-03_canola/NB501086_0095_CHelliwell_CSIRO_Brapa_gDNA"
-# NUM=$(expr $(ls -1 ${INDIR}/*.fastq.gz | wc -l) - 1)
-# sbatch -a 0-$NUM --export INDIR="$INDIR" LC_BWA_alignment_slurm.sh
+    #echo "DS : Description - undefined - should this contain combined pool/sample/plant/plate info???"
+
+    DT=`echo $LINE | cut -d ',' -f16`   #sequence_date"
+    echo "DT : $DT"
+
+    #echo "FO : Flow Order - undefined"
+    #echo "KS : Array of necleotide bases - undefined"
+    #echo "LB : Library - undefined"
+
+    PG=`echo $LINE | cut -d ',' -f15`   #sequence_technique"
+    echo "PG : $PG"
+
+    #echo "PI : Predicted median insert - undefined"
+
+    PL=`echo $LINE | cut -d ',' -f14`  #sequence_platform"
+    echo "PL : $PL"
+
+    #echo "PM : Platform model - undefined"
+    #echo "PU : Platform unit - undefined"
+    
+    SM=`echo $LINE | cut -d ',' -f4`   #Pool"
+    echo "SM : $SM"
+
+done 
+
+#reset the default format back to what it was
+#IFS=$OLDIFS
 
 
