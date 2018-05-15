@@ -16,14 +16,19 @@ if [ ! -z "$SLURM_ARRAY_TASK_ID" ]
             SPECIES=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f5`
             INDEX=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f3`
             DATE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f4`
+	       (date library was contructed)
             PLATFORM=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f10`
             LEFT=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f11`
             RIGHT=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f12`
             LIBRARY="${SAMPLE}.${LEFT}-${RIGHT}.${DATE}"
+                (sample id, index from header and sample date)
             CENTRE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f8`
             SEQDATE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f9`
             UNIT=`gzip -cd ${IN_DIR}/${STEM}*p.fq.gz | head -1 | cut -d':' -f${UNIT_RX}`
-            ID=`echo ${UNIT}.${INDEX} | sed s/:/./g`
+		(barcode, lane no from header)
+	    ID=`echo ${UNIT}.${INDEX} | sed s/:/./g`
+            sed means replace ':' with '.'
+
             echo "@RG\tID:${ID}\tCN:${CENTRE}\t"` \
                    `"DT:${SEQDATE}\tLB:${LIBRARY}\t"` \
                    `"PL:${PLATFORM}\tPU:${UNIT}\tSM:${SAMPLE}" > $OUT_DIR/${STEM}.log
@@ -38,8 +43,7 @@ if [ ! -z "$SLURM_ARRAY_TASK_ID" ]
                     -r $INTERNAL \
                     -T $SCORE \
                     -M \
-                    -R 
-"@RG\tID:${ID}\tCN:${CENTRE}\tDT:${SEQDATE}\tLB:${LIBRARY}\tPL:${PLATFORM}\tPU:${UNIT}\tSM:${SAMPLE}" > 
+                    -R "@RG\tID:${ID}\tCN:${CENTRE}\tDT:${SEQDATE}\tLB:${LIBRARY}\tPL:${PLATFORM}\tPU:${UNIT}\tSM:${SAMPLE}" > 
 ${OUT_DIR}/${STEM}.sam 2>> $OUT_DIR/${STEM}.log
             fi
     else
