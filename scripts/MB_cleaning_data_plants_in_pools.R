@@ -34,7 +34,7 @@ sowing_date<-ALL%>%
 sequence_date<-c("TBA", "TBA", "TBA", "TBA", "TBA", "TBA")#according to plate number
 sequence_platform<-"Illumina" 
 sequence_technique<-c("HiSeq","HiSeq","HiSeq","NextSeq","NextSeq","NextSeq") #according to plate number
-processing_centre<-"ACRF Biomolecular Resource Facility, John_Curtin"
+processing_centre<-"ACRF Biomolecular Resource Facility - John_Curtin"
 
 
 num_plates<-6 #number of plates that were sequenced
@@ -160,6 +160,6 @@ headers <- headers[order(headers$poolNo),]
 df <- cbind(data, headers[,-4])
 
 #write_csv("to Pearcey directort.csv) FILL ME IN 
-write.csv(df, "/OSM/CBR/AF_DATASCHOOL/input/Pools_metadata/combined_data.csv")
+write_csv(df, "/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv")
 
 #END SCRIPT (FOR NOW)
