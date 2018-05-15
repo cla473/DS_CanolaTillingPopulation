@@ -9,10 +9,10 @@
 # Application specific commands
 # added */* to be able to choose all files from 2018-05-03_canola folder
 INDIR="/OSM/CBR/AF_DATASCHOOL/input/2018-05-03_canola/*/*.gz"
-
+OUTFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/headers.txt"
 
 #add a header row to our header.txt file
-echo "index, barcode, laneNo, poolNo, sampleNo, filename" > headers.txt
+echo "Index, Barcode, Lane_No, Pool, Sample_No, Filename" > $OUTFILE
 
 
 for FILE in $INDIR
@@ -34,7 +34,7 @@ do
     POOLNO=`echo $FILE | cut -d '/' -f 8 | cut -d '_' -f 1 | tr --delete Pool`
     SAMPLENO=`echo $FILE | cut -d '/' -f 8 | cut -d '_' -f 2 |tr --delete S `
 
-    echo  $INDEX',' $BARCODE',' $LANENO',' $POOLNO',' $SAMPLENO',' $(basename "$FILE") >> headers.txt    
+    echo  $INDEX',' $BARCODE',' $LANENO',' $POOLNO',' $SAMPLENO',' $(basename "$FILE") >> $OUTFILE
   
 
 done
