@@ -12,7 +12,7 @@ IN_LIST=( $(tail -n +2 ${METADATA} | cut -f 1 | sed "s/_R[12].*//" | sort -u) );
 if [ ! -z "$SLURM_ARRAY_TASK_ID" ]
     then
             STEM=${IN_LIST["$SLURM_ARRAY_TASK_ID"]}
-            SAMPLE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f2`
+            SAMPLE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f2`   ## PW - you may need to use * cut -d "," -f2 * to extract f2 since ',' is used as the delimter (CSV file)
             SPECIES=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f5`
             INDEX=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f3`
             DATE=`grep "${STEM}*${READ_ONE}" $METADATA | cut -f4`
