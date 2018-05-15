@@ -32,12 +32,10 @@ do
    
     #splits the $FILE by '/' and gets the 8th column, then splits by '_' and gets the first and second columns
     # then deletes unwanted charachters (tr --delete ...)
-    #POOLNO=`echo $FILE | cut -d '/' -f 8 | cut -d '_' -f 1 | tr --delete Pool`
-    #SAMPLENO=`echo $FILE | cut -d '/' -f 8 | cut -d '_' -f 2 |tr --delete S `
     POOL=`echo $FILENAME | cut -d '_' -f 1 | tr --delete Pool `
     SAMPLE=`echo $FILENAME | cut -d '_' -f 2 | tr --delete S `
 
-    echo  $INDEX',' $BARCODE',' $LANENO',' $POOLNO',' $SAMPLENO',' $(basename "$FILE")',' $FILE >> $OUTFILE
+    echo  $INDEX',' $BARCODE',' $LANENO',' $POOL',' $SAMPLE',' $(basename "$FILE")',' $FILE >> $OUTFILE
 
 done
  
