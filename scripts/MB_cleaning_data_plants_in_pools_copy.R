@@ -155,9 +155,7 @@ data <- as.data.frame(plants_in_pools[c(1:12,16:23,13:15,24:25)])# -- changes co
 data[,7] <- as.Date(gsub("\\.","-",substr(unlist(data[,7]), 3, nchar(data[,7]))), "%d-%m-%y")
 
 headers <- read.csv("../metadata/headers.txt", header=T)
-rownames(headers) <- c()
 headers <- headers[order(headers$poolNo),]
-
 
 df <- cbind(data, headers[,-4])
 
