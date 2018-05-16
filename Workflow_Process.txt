@@ -1,0 +1,46 @@
+title: "Workflow_Process"
+author: "Loretta Clancy"
+date: "May 16, 2018"
+
+
+Workflow Process for AF_DataSchool Big Data Project
+
+This discussion the processes required to work with the data provided, and produce the required 
+outputs.
+
+1. Initial Preparation:
+
+In preparation for the processing, the metadata for the project needs to be collected from the 
+various excel spreadsheets and other documents provided.
+
+This has been done in the R Script:
+  MB_cleaning_data_plants_in_pools.R
+
+This will create the output file: metadata.csv?
+
+
+2. Processing the data
+
+This section discusses the steps required to process the data:
+
+a.  Run fastqc over files in specified directory using the following script
+
+    JR_Run_fastqc_directory
+    
+b.  Download the required genome sequence information
+
+    JR_download_genome.sh
+
+c.  Extract the header details from the zipped fastqc files.
+
+    KN6_GetHeaderDetails.sh
+    This will create the output file: "headers.txt"    
+    
+d.  Combine the headers.txt information with the metadata to generate a processing list.  This 
+is done with the R Script:
+
+    LC_Combine_Header_Metadata.R
+    This will create the output file: "combined_data.csv"
+    
+e.  Run BWA, using the data collected in the previous step.
+
