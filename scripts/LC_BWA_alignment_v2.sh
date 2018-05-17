@@ -10,6 +10,8 @@ module load bwa
 #TODO:
 #  The INFILE and GENOME will need to be passed in - *DONE* PW
 #  Needs to be ran on HPC (currently works locally) (and details put in here as comments)
+#  Trial comments added
+
 
 #PW - added input for parameters to pass to script
 if [ -z "$1" ] ; ## Check for provided input - first, assumed to be genome
@@ -90,3 +92,13 @@ then
 fi
 
 exit 0
+
+
+# For submission:
+
+# INFILE="/OSM/CBR/AF_DATASCHOOL/output/combined_data.csv"
+# GENOME="/OSM/CBR/AF_DATASCHOOL/input/genome/GCF_00068695.2_Bra_napus_v2.0_genomic.fna"
+# NUM=`expr $(wc -l $INFILE | cut -d" " -f1) - 1`
+# sbatch -a -0-$NUM --expoet GENOME=$GENOME" INFILE="$INFILE" LC_BWA_alignment_v2.sh
+
+
