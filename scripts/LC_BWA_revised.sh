@@ -11,7 +11,16 @@
 #NOTE:  The output directory is same as filenamePath directory except that 'input' is replace with 'output'
 
 #for testing only
-INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
+#INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
+
+
+if [ -z "$1" ];  ##Check if any input provided
+  then 	
+    echo "** Error ** No input -> please provide DIR & filename"
+    exit 1
+  else 
+    INFILE=$1 ## Assumes valid input - no sanity check
+fi
 
 module load bwa
 
@@ -22,8 +31,7 @@ module load bwa
 #need to check what we need here as far as validating the file goes
 #if [ -f "$INFILE" ] && { echo "$INFILE file not found"; exit 99; }
 
-cat $INFILE | while read LINE
-do
+cat $INFILE | while read LINE; do
     #echo $LINE
     FN=`echo $LINE | cut -d ',' -f6`   #FileName"
     echo "FN : $FN "
@@ -60,9 +68,8 @@ do
     SM=`echo $LINE | cut -d ',' -f4`   #Pool"
     echo "SM : $SM"
 
-done 
+done
 
 #reset the default format back to what it was
 #IFS=$OLDIFS
-
 
