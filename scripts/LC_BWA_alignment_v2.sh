@@ -99,6 +99,6 @@ exit 0
 # INFILE="/OSM/CBR/AF_DATASCHOOL/output/combined_data.csv"
 # GENOME="/OSM/CBR/AF_DATASCHOOL/input/genome/GCF_00068695.2_Bra_napus_v2.0_genomic.fna"
 # NUM=`expr $(wc -l $INFILE | cut -d" " -f1) - 1`
-# sbatch -a -0-$NUM --expoet GENOME=$GENOME" INFILE="$INFILE" LC_BWA_alignment_v2.sh
+# sbatch -a -0-$NUM --export GENOME=$GENOME" INFILE="$INFILE" LC_BWA_alignment_v2.sh
 
 
