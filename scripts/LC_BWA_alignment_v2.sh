@@ -11,31 +11,15 @@ module load bwa
 #  The INFILE and GENOME will need to be passed in
 #  Needs to be ran on HPC (currently works locally) (and details put in here as comments)
 
-<<<<<<< HEAD
 #for testing purposes only
 INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
 GENOME="/OSM/CBR/AF_DATASCHOOL/input/genome/GCF_000686985.2_Bra_napus_v2.0_genomic.fna"
-=======
-#for testing only
-#INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
-
-
-if [ -z "$1" ];  ##Check if any input provided
-  then 	
-    echo "** Error ** No input -> please provide DIR & filename"
-    exit 1
-  else 
-    INFILE=$1 ## Assumes valid input - no sanity check
-fi
->>>>>>> 7aa19d25b8ed284473520f91ac8cf23654bc4b70
-
 
 
 #NOTE:  The output directory is same as filenamePath directory except that 'input' is replace with 'output'
 
 #need to check what we need here as far as validating the file goes
 #if [ -f "$INFILE" ] && { echo "$INFILE file not found"; exit 99; }
-<<<<<<< HEAD
 if [ -f "$INFILE" ] 
 then
 
@@ -87,48 +71,4 @@ then
         fi
     done 
 fi
-=======
-
-cat $INFILE | while read LINE; do
-    #echo $LINE
-    FN=`echo $LINE | cut -d ',' -f6`   #FileName"
-    echo "FN : $FN "
-
-    ID=`echo $LINE | cut -d ',' -f1`  #Index"
-    echo "ID : $ID"
-
-    BC=`echo $LINE | cut -d ',' -f2`  #Barcode"
-    echo "BC : $BC"
-
-    CN=`echo $LINE | cut -d ',' -f17`  #processing_centre"
-    echo "CN : $CN"
-
-    #echo "DS : Description - undefined - should this contain combined pool/sample/plant/plate info???"
-
-    DT=`echo $LINE | cut -d ',' -f16`   #sequence_date"
-    echo "DT : $DT"
-
-    #echo "FO : Flow Order - undefined"
-    #echo "KS : Array of necleotide bases - undefined"
-    #echo "LB : Library - undefined"
-
-    PG=`echo $LINE | cut -d ',' -f15`   #sequence_technique"
-    echo "PG : $PG"
-
-    #echo "PI : Predicted median insert - undefined"
-
-    PL=`echo $LINE | cut -d ',' -f14`  #sequence_platform"
-    echo "PL : $PL"
-
-    #echo "PM : Platform model - undefined"
-    #echo "PU : Platform unit - undefined"
-    
-    SM=`echo $LINE | cut -d ',' -f4`   #Pool"
-    echo "SM : $SM"
-
-done
-
-#reset the default format back to what it was
-#IFS=$OLDIFS
->>>>>>> 7aa19d25b8ed284473520f91ac8cf23654bc4b70
 
