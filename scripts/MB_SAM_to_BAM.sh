@@ -12,18 +12,21 @@ module load samtools/1.3.1
 if [ -d "$INDIR" ]
 	then
      	# generate a list of the .sam file names to call in
-     	SAMPLES=( `ls -1 ${INDIR}/*.sam` ) 
+     	IN_LIST=( `ls -1 ${INDIR}/*.sam` ) 
 	# convert sam to sorted bam forma
 		if [ ! -z "$SLURM_ARRAY_TASK_ID" ]			
        		 then
-		 # Define filename to be called
+		 # Define filename to be called from the INDIR 
 		 STEM=${IN_LIST["$SLURM_ARRAY_TASK_ID"]}
-        	 # VIEW .sam file which converts it into a .bam file:[-b]=output is .bam; [S]=input is .sam (expects .bam as default)
+        	 # VIEW .sam to  converts it into a .bam file:[-b]=output is .bam; 
+		 # [S]=input is .sam (expects .bam as default)
         	 samtools view -bS ${STEM}.sam > ${STEM}.bam
-		 # SORT the .bam files in case needed downstream  && remove unsorted.bam files to save space [O] = output is .bam	
-		 samtools sort -O bam ${STEM}.bam ${STEM}_sorted.bam && rm ${STEM}.bam 
-		 # INDEX the .bam files for Picard && remove the unindexed.bam files to save on space 
-		 samtools index ${STEM}_sorted.bam ${STEM}_sorted__indexed.bam && rm ${STEM}_sorted.bam
+		 # SORT the .bam files in case needed downstream
+		 # [O] = output is .bam [-o]: write output to following file	
+		 samtools sort -O bam ${STEM}.bam -o ${STEM}_sorted.bam
+		 # INDEX the .bam files for Picard && remove the unindexed.bam.bai (index file can't be opened
+		 # but used down the  line  by Picard and GATK) 
+		 samtools index ${STEM}_sorted.bam
 		else
 		 echo "Error: Missing array index as SLURM_ARRAY_TASK_ID" 
 		fi
@@ -31,7 +34,7 @@ if [ -d "$INDIR" ]
          echo "Error: Missing array index as SLURM_ARRAY_TASK_ID"
  fi
 
-# For Submission:
+# For Submission - from Jared's previous file -- UPDATE_ME:
 # INDIR="/OSM/CBR/AF_DATASCHOOL/output/SB501086_0095_CHelliwell_CSIRO_Brapa_gDNA"  PUT YOUR DIRECTORY LOCATION 
 # outputHERE
 # NUM=$(expr $(ls -1 ${INDIR}/*.fastq.sam | wc -l) - 1)
