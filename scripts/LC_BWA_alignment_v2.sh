@@ -14,21 +14,21 @@ module load bwa
 
 
 #PW - added input for parameters to pass to script
-if [ -z "$1" ] ; ## Check for provided input - first, assumed to be genome
-  then
-    echo "* Error * -> please provide genome location and name"
-    exit 1
-  else
-   GENOME=$1
-fi
+#if [ -z "$1" ] ; ## Check for provided input - first, assumed to be genome
+#  then
+#    echo "* Error * -> please provide genome location and name"
+#    exit 1
+#  else
+GENOME=$1
+#fi
 
-if [ -z "$2" ] ; ## Another check - this time for metadata
-  then
-    echo "* Error * -> provide location and name for metadata"
-    exit 1
-  else
-    INFILE=$2
-fi
+#if [ -z "$2" ] ; ## Another check - this time for metadata
+#  then
+#    echo "* Error * -> provide location and name for metadata"
+#    exit 1
+#  else
+INFILE=$2
+#fi
 
 #for testing purposes only
 #INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
