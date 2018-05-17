@@ -12,6 +12,8 @@ module load bwa
 #  Needs to be ran on HPC (currently works locally) (and details put in here as comments)
 #  Trial comments added below
 
+OUTDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/BWA"
+
 
 #PW - added input for parameters to pass to script
 if [ -z "$1" ] ; ## Check for provided input - first, assumed to be genome
@@ -43,7 +45,7 @@ if [ -f "$INFILE" ] ;
 
     cat $INFILE | while read LINE
     do
-#        echo $LINE
+#       echo $LINE
 
         #columns are:
         #   (1) Index, (2)Barcode, (3)Lane_No, (4)Pool, (5)Sample_No, (6)Filename, 
@@ -57,7 +59,12 @@ if [ -f "$INFILE" ] ;
         POOL=`echo $LINE | cut -d ',' -f4 `    
         SAMPLE=`echo $LINE | cut -d ',' -f5 `    
         FILENAME=`echo $LINE | cut -d ',' -f6 | sed -e 's/^"//' -e 's/"$//' ` 
-        FILEPATH=`echo $LINE | cut -d ',' -f7 | sed -e 's/^"//' -e 's/"$//' ` 
+
+#       FILEPATH=`echo $LINE | cut -d ',' -f7 | sed -e 's/^"//' -e 's/"$//' `  ## PW- Spoke with Kerensa in relation to this
+#	-inclusion of this as part of output means that there are multiple paths for each data set/sample
+#	given that this info is part of the metadata, there's an argument to have a single folder/directory for BWA output
+# 	will adopt this approach - OUTDIR explicitly hard coded and defined at start of script
+
         PLATFORM=`echo $LINE | cut -d ',' -f8 | sed -e 's/^"//' -e 's/"$//' `  
         TECHNIQUE=`echo $LINE | cut -d ',' -f9 | sed -e 's/^"//' -e 's/"$//' `  
         SEQDATE=`echo $LINE | cut -d ',' -f10 | sed -e 's/^"//' -e 's/"$//' `   
@@ -66,17 +73,16 @@ if [ -f "$INFILE" ] ;
         ID=`echo "${BARCODE}.${LANE}.${INDEX}"` ## Double reference to index
         DS=`echo "Pool_${POOL}.Sample_${SAMPLE}"`
         PU=`echo "${BARCODE}.${LANE}"` 
-        OUTDIR=`echo $(dirname ${FILEPATH}) | sed -e 's/input/output/' `  ## Changes 'input' to 'output' in filename - different paths present in data set
-#        echo ${OUTDIR}
+#       OUTDIR=`echo $(dirname ${FILEPATH}) | sed -e 's/input/output/' `  ## Changes 'input' to 'output' in filename - different paths present in data set
+#       echo ${OUTDIR}
 
         #now we are ready to build the full string to be passed as a parametre for  BWA
         RG1=`echo "@RG\tID:${ID}$\tBC:${INDEX}\tCN:${PROCCENTRE}\tDS:${DS}\tDT:${SEQDATE}\t"`
         RG2=`echo "${RG1}LB:${BARCODE}\tPG:${TECHNIQUE}\tPL:${PLATFORM}\tPM:${TECHNIQUE}\t"`
         RG=`echo "${RG2}PU:${PU}\tSM:${POOL}" `
-        echo ${RG}   
+#       echo ${RG}   
 
 ## After building @RG 'Read Group', parse as string to BWA for processing....
-
 
         if [ ! -f ${OUTDIR}/${FILENAME}.sam ]
         then
@@ -88,7 +94,7 @@ if [ -f "$INFILE" ] ;
                   -T $SCORE \
                   -M \
                   -r ${RG} > ${OUTDIR}/${FILENAME}.sam 2>> ${OUTDIR}/${FILENAME}.log
-        fi
+#       fi
    done 
 fi
 
