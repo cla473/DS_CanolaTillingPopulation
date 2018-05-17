@@ -7,13 +7,15 @@
 
 module load bwa
 
+#TODO:
+#  The INFILE and GENOME will need to be passed in
+#  Needs to be ran on HPC (currently works locally) (and details put in here as comments)
 
-#Note:  The file "combined_data.csv" will be passed in
-#for testing only
-
+#for testing purposes only
 INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
-
 GENOME="/OSM/CBR/AF_DATASCHOOL/input/genome/GCF_000686985.2_Bra_napus_v2.0_genomic.fna"
+
+
 
 #NOTE:  The output directory is same as filenamePath directory except that 'input' is replace with 'output'
 
@@ -57,7 +59,7 @@ then
         RG=`echo "${RG2}PU:${PU}\tSM:${POOL}" `
         echo ${RG}   
 
-        if [ ! -f ${OUTDIR}/${ID}.sam ]
+        if [ ! -f ${OUTDIR}/${FILENAME}.sam ]
         then
            bwa mem ${GENOME} ${FILEPATH} \
                   -t $THREADS \
