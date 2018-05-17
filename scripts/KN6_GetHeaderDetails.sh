@@ -35,7 +35,7 @@ do
     POOL=`echo $FILENAME | cut -d '_' -f 1 | tr --delete Pool `
     SAMPLE=`echo $FILENAME | cut -d '_' -f 2 | tr --delete S `
 
-    echo "\"$INDEX\", \"$BARCODE\", $LANENO, $POOL, $SAMPLE, \"$(basename "$FILE")\", \"$FILE\"" >> $OUTFILE
+    echo "\"$INDEX\",\"$BARCODE\",$LANENO,$POOL,$SAMPLE,\"$(basename "$FILE")\",\"$FILE\"" >> $OUTFILE
 
 done
  
