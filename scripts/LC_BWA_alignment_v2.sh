@@ -15,21 +15,20 @@ module load bwa
 OUTDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/BWA"
 
 
+
 #PW - added input for parameters to pass to script
-if [ -z "$1" ] ; ## Check for provided input - first, assumed to be genome
+## 
+if [ -z "$GENOME" ] ; ## Check for provided input - first, assumed to be genome
   then
     echo "* Error * -> please provide genome location and name"
     exit 1
-  else
-GENOME=$1
 fi
 
-if [ -z "$2" ] ; ## Another check - this time for metadata
+
+if [ -z "$INFILE" ] ; ## Another check - this time for metadata
   then
     echo "* Error * -> provide location and name for metadata"
     exit 1
-  else
-INFILE=$2
 fi
 
 #for testing purposes only
@@ -60,7 +59,10 @@ if [ -f "$INFILE" ] ;
         SAMPLE=`echo $LINE | cut -d ',' -f5 `    
         FILENAME=`echo $LINE | cut -d ',' -f6 | sed -e 's/^"//' -e 's/"$//' ` 
 
-#       FILEPATH=`echo $LINE | cut -d ',' -f7 | sed -e 's/^"//' -e 's/"$//' `  ## PW- Spoke with Kerensa in relation to this
+        FILE_WITH_PATH=`echo $LINE | cut -d ',' -f7 | sed -e 's/^"//' -e 's/"$//' `
+#	
+#	Changed variable to indicate pathname
+## PW- Spoke with Kerensa in relation to this
 #	-inclusion of this as part of output means that there are multiple paths for each data set/sample
 #	given that this info is part of the metadata, there's an argument to have a single folder/directory for BWA output
 # 	will adopt this approach - OUTDIR explicitly hard coded and defined at start of script
@@ -86,15 +88,15 @@ if [ -f "$INFILE" ] ;
 
         if [ ! -f ${OUTDIR}/${FILENAME}.sam ]
         then
-           bwa mem ${GENOME} ${FILEPATH} \
+           bwa mem ${GENOME} ${FILE_WITH_PATH} \
                   -t $THREADS \
                   -k $SEED \
                   -w $WIDTH \
                   -r $INTERNAL \
                   -T $SCORE \
                   -M \
-                  -r ${RG} > ${OUTDIR}/${FILENAME}.sam 2>> ${OUTDIR}/${FILENAME}.log
-#       fi
+                  -R ${RG} > ${OUTDIR}/${FILENAME}.sam 2>> ${OUTDIR}/${FILENAME}.log
+        fi
    done 
 fi
 
@@ -103,9 +105,9 @@ exit 0
 
 # For submission:
 
-# INFILE="/OSM/CBR/AF_DATASCHOOL/output/combined_data.csv"
+# INFILE="/OSM/CBR/AF_DATASCHOOL/output/metadata/combined_data.csv"
 # GENOME="/OSM/CBR/AF_DATASCHOOL/input/genome/GCF_00068695.2_Bra_napus_v2.0_genomic.fna"
 # NUM=`expr $(wc -l $INFILE | cut -d" " -f1) - 1`
-# sbatch -a -0-$NUM --export GENOME=$GENOME" --export INFILE="$INFILE" LC_BWA_alignment_v2.sh
+# sbatch -a 0-$NUM --export GENOME="$GENOME" --export INFILE="$INFILE" LC_BWA_alignment_v2.sh
 
 
