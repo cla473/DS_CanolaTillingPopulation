@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=run_fastqc
+#SBATCH --job-name=sam_to_bam
 #SBATCH --time=00:10:00
 #SBATCH --ntasks-per-node=5
 #SBATCH --mem=10g
@@ -13,14 +13,14 @@ if [ -d "$INDIR" ]
 	then
      	# generate a list of the .sam file names to call in
      	IN_LIST=( `ls -1 ${INDIR}/*.sam` ) 
-	# convert sam to sorted bam forma
+	# convert sam to sorted bam format
 		if [ ! -z "$SLURM_ARRAY_TASK_ID" ]			
        		 then
 		 # Define filename to be called from the INDIR 
 		 STEM=${IN_LIST["$SLURM_ARRAY_TASK_ID"]}
         	 # VIEW .sam to  converts it into a .bam file:[-b]=output is .bam; 
-		 # [S]=input is .sam (expects .bam as default)
-        	 samtools view -bS ${STEM}.sam > ${STEM}.bam
+		 # [S]=input is .sam (expects .bam as default) ##REMOVED .sam from ${STEM}.sam for trialling
+        	 samtools view -bS ${STEM} > ${STEM}.bam
 		 # SORT the .bam files in case needed downstream
 		 # [O] = output is .bam [-o]: write output to following file	
 		 samtools sort -O bam ${STEM}.bam -o ${STEM}_sorted.bam
@@ -35,9 +35,9 @@ if [ -d "$INDIR" ]
  fi
 
 # For Submission - from Jared's previous file -- UPDATE_ME:
-# INDIR="/OSM/CBR/AF_DATASCHOOL/output/SB501086_0095_CHelliwell_CSIRO_Brapa_gDNA"  PUT YOUR DIRECTORY LOCATION 
-# outputHERE
-# NUM=$(expr $(ls -1 ${INDIR}/*.fastq.sam | wc -l) - 1)
-# sbatch -a 0-$NUM --export INDIR="$INDIR" SAM_to_BAM.sh#
+
+# INDIR='/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/BWA'
+# NUM=$(expr $(ls -1 ${INDIR}/*.sam | wc -l) - 1)
+# sbatch -a 0-$NUM --export INDIR="$INDIR" SAM_to_BAM.sh
 
  
