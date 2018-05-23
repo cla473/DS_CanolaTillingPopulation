@@ -5,7 +5,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=10
 #SBATCH --mem=10g
-
+module load gatk
 ## For testing only
 #INDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/BWA"
 INDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/BWA"
@@ -35,16 +35,16 @@ GENOME_REF="/OSM/CBR/AF_DATASCHOOL/input/genome/GCF_000686985.2_Bra_napus_v2.0_g
  
 FILES=`ls -1 $INDIR/*.sam.bam`
 
-if [ ! $SLURM_ARRAY_TASK_ID ] ;
-then
-  i=$SLURM_ARRAY_TASK_ID
-  gatk HaplotypeCaller \
+if [ -z ! "$SLURM_ARRAY_TASK_ID" ] ;
+   then
+       i=$SLURM_ARRAY_TASK_ID
+       gatk HaplotypeCaller \
        -R $GENOME_REF \
        -I ${FILES[$i]}.sam.bam \
-       -O $OUTDIR/${FILES[$i]}.gvcf \
+       -O ${OUTDIR}/${FILES[$i]}.gvcf \
        -ERF GVCF \
        -ploidy 72 \
-       --max-alternate-alleles 6
+       --max-alternate-alleles 6 >> ${OUTDIR}/${FILES[$i]}.log
 fi
 
 exit 0
