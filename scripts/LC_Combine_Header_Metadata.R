@@ -24,8 +24,6 @@ merged.df <- headers %>%
          Processing_Centre = processing_centre 
   )
 
-
-
 #colnames(merged.df)
 # Index, Barcode, Lane_No, Pool, Sample_No, Filename, FileNamePath, 
 # Plant_ID, Plate_ID, Gen, Treatment, Date_of_treatment, sowing_date, sequence_platform, 
