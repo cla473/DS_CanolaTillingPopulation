@@ -41,13 +41,15 @@ FILES=`ls -1 $INDIR/*.sam_sorted.bam`
 if [ ! -z "$SLURM_ARRAY_TASK_ID" ] ;
    then
        i=$SLURM_ARRAY_TASK_ID
-       gatk HaplotypeCaller \
-       -R ${GENOME_REF} \
-       -I ${INDIR}/${FILES[$i]} \
-       -O ${OUTDIR}/${FILES[$i]}.vcf \
-       -ERC GVCF \
-       -ploidy 72 \
-       --max-alternate-alleles 6
+       echo $i
+       echo ${FILES[$i]}
+#       gatk HaplotypeCaller \
+#       -R ${GENOME_REF} \
+#       -I ${INDIR}/${FILES[$i]} \
+#       -O ${OUTDIR}/${FILES[$i]}.vcf \
+#       -ERC GVCF \
+#       -ploidy 72 \
+#       --max-alternate-alleles 6
 fi
 
 exit 0
