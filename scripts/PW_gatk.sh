@@ -2,16 +2,15 @@
 
 #SBATCH --job-name=show_file_dir
 #SBATCH --time=01:00:00
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
 #SBATCH --mem=10g
+#SBATCH --ntasks=1
 module load gatk/4.0.4.0
 ## For testing only
 #INDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/BWA"
 INDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/BWA"
 OUTDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/gatk"
 GENOME_REF="/OSM/CBR/AF_DATASCHOOL/input/ref_genome/GCF_000686985.2_Bra_napus_v2.0_genomic.fasta"
-FILENAME="Pool10_S10_R1_001.fastq.gz.sam.bam"
+#FILENAME="Pool10_S10_R1_001.fastq.gz.sam_sorted.bam"
 
 
 ## Extra step needed to create dict for fa - use following
@@ -37,20 +36,19 @@ FILENAME="Pool10_S10_R1_001.fastq.gz.sam.bam"
 #  exit 1
 #fi
  
-#FILES=`ls -1 $INDIR/*.sam.bam`
+FILES=`ls -1 $INDIR/*.sam_sorted.bam`
 
-#if [ ! -z "$SLURM_ARRAY_TASK_ID" ] ;
-#   then
-#       i=$SLURM_ARRAY_TASK_ID
-#       FILENAME=$FILES[$i]
+if [ ! -z "$SLURM_ARRAY_TASK_ID" ] ;
+   then
+       i=$SLURM_ARRAY_TASK_ID
        gatk HaplotypeCaller \
        -R ${GENOME_REF} \
-       -I ${INDIR}/${FILENAME} \
-       -O ${OUTDIR}/${FILENAME}.vcf \
+       -I ${INDIR}/${FILES[$i]} \
+       -O ${OUTDIR}/${FILES[$i]}.vcf \
        -ERC GVCF \
        -ploidy 72 \
        --max-alternate-alleles 6
-#fi
+fi
 
 exit 0
 
