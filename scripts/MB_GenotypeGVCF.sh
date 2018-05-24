@@ -1,10 +1,9 @@
 #!/bin/bash
 
 #SBATCH --job-name=Combine_GVCF
-#SBATCH --time=00:10:00
-#SBATCH --nodes=-1
-#SBATCH --ntasks=5
-#SBATCH --mem=10g
+#SBATCH --time=24:00:00
+#SBATCH --ntasks=1
+#SBATCH --mem=20g
 
 module load gatk/4.0.4.0
 # Combining GVCF files into one VCF callset
@@ -23,17 +22,30 @@ do
     echo $FILE
     FILENAME=`echo $(basename "$FILE")`
     echo $FILENAME
-    echo ${FILENAME} | sed 's/^/--variant /g' | sed 's/.vcf//g' >> ${INDIR}/canola_gvcf.list
+    #echo ${FILENAME} | sed 's/^/--variant /g' >> ${INDIR}/canola_gvcf.list
+    echo ${FILE} >> ${INDIR}/canola_gvcf.list
+
 done
 
 #samples=$(find . | sed 's/.\///' | grep -E 'g.vcf$' | sed 's/^/--variant /')
+#FILEDATA = `cat ${INDIR}/canola_gvcf.list` 
 
-gatk GenotypeGVCFs \
+#gatk CombineGVCFs \
+#   -R ${GENOME_REF} \
+#   ${FILEDATA} \
+#   -O ${OUTDIR}/new_all_gvcf_raw.vcf 2> ${OUTDIR}/new_all_gvcf_raw.log
+
+gatk CombineGVCFs \
    -R ${GENOME_REF} \
-   -V ${INDIR}/canola_gvcf.list \
-   -O ${OUTDIR}/new_all_gvcf_raw.vcf 2> ${OUTDIR}/new_all_gvcf_raw.log
+   --variant ${INDIR}/canola_gvcf.list \
+   -O ${OUTDIR}/new_all_gvcf_raw.vcf 
+	#2> ${OUTDIR}/new_all_gvcf_raw.log
+
  
 echo "Process completed"
 
 # To run:
-#./MB_GenotypeGVCF.sh
+#./MB_GenotypeGVCF.sh == FROM COMMAND LIND
+
+# To SLURM
+#sbatch MG_GenotypeGVCF.sh 
