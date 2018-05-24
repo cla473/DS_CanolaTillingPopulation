@@ -30,6 +30,7 @@ a.  Run fastqc over files in specified directory using the following script
 b.  Download the required genome sequence information
 
     JR_download_genome.sh
+    Is there something else that needs to happen with file?
 
 c.  Extract the header details from the zipped fastqc files.
 
@@ -44,3 +45,15 @@ is done with the R Script:
     
 e.  Run BWA, using the data collected in the previous step.
 
+    PW_BWA.sh
+
+
+f.  Run a script to create the sam files from the bam files
+
+    MB_BAM_TO_SAM.sh
+
+h.  Convertion the genome file to the correct  format   
+	* make a copy of fastq.f file to fastq.fai
+        * generate dictionary files.
+
+i.  run GATK on files
