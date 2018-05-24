@@ -13,6 +13,10 @@ OUTDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/gatk"
 GENOME_REF="/OSM/CBR/AF_DATASCHOOL/input/ref_genome/GCF_000686985.2_Bra_napus_v2.0_genomic.fasta"
 FILENAME="Pool10_S10_R1_001.fastq.gz.sam.bam"
 
+
+## Extra step needed to create dict for fa - use following
+#picard CreateSequenceDictionary R= GCF_000686985.2_Bra_napus_v2.0_genomic.fasta O= GCF_000686985.2_Bra_napus_v2.0_genomic.dict
+  
 #FILES=`ls -1 $INDIR/*.$EXT`
 #echo $FILES
 ## Simply outputs file contents as a string and works :)
