@@ -11,15 +11,11 @@ FILEDIR="/OSM/CBR/AF_DATASCHOOL/output/2018-05-03_canola/GVCF"
 GENOME="/OSM/CBR/AF_DATASCHOOL/input/ref_genome/GCF_000686985.2_Bra_napus_v2.0_genomic.fasta"
 
 # Clear our log file each time
-echo "Processing started... " > ${FILEDIR}/genotypeGVCF.log
+#echo "Processing started... " > ${FILEDIR}/genotypeGVCF.log
 
-gatk GenotypeGVCFs \
-   -R ${GENOME} \
-   -V ${FILEDIR}/new_all_gvcf_raw.vcf.idx \
-   -O ${FILEDIR}/output.vcf.gz 2>> ${FILEDIR}/genotypeGVCF.log
-
+gatk GenotypeGVCFs -R ${GENOME} --variant ${FILEDIR}/new_all_gvcf_raw.vcf -O ${FILEDIR}/output.vcf 
  
-echo "Process completed" >> ${FILEDIR}/genotypeGVCF.log
+#echo "Process completed" >> ${FILEDIR}/genotypeGVCF.log
 
 # To run on Command Line:
 #./LC_GenotypeGVCF.sh 
